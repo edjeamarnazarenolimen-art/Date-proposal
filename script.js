@@ -1,166 +1,61 @@
-:root {
-  color-scheme: light;
-  font-family: 'DM Sans', sans-serif;
-  color: #49313e;
-  background: #fff1f3;
+const noButton = document.getElementById('noButton');
+const buttonArea = document.getElementById('buttonArea');
+const yesButton = document.getElementById('yesButton');
+const confirmation = document.getElementById('confirmation');
+const dateInput = document.getElementById('dateInput');
+const timeInput = document.getElementById('timeInput');
+const confirmationDetails = document.getElementById('confirmationDetails');
+const eventDetails = document.getElementById('eventDetails');
+const prompt = document.querySelector('.prompt');
+let choosingSchedule = false;
+
+function dodgeNoButton() {
+  const area = buttonArea.getBoundingClientRect();
+  const button = noButton.getBoundingClientRect();
+  const maxX = Math.max(0, area.width - button.width);
+  const maxY = 80;
+  const x = Math.random() * maxX - maxX / 2;
+  const y = (Math.random() - 0.5) * maxY;
+
+  noButton.style.position = 'relative';
+  noButton.style.left = `${x}px`;
+  noButton.style.top = `${y}px`;
 }
 
-* { box-sizing: border-box; }
+noButton.addEventListener('pointerenter', dodgeNoButton);
+noButton.addEventListener('click', dodgeNoButton);
+noButton.addEventListener('focus', dodgeNoButton);
 
-body {
-  min-height: 100vh;
-  margin: 0;
-  padding: 32px 18px;
-  display: grid;
-  place-items: center;
-  overflow-x: hidden;
-  background:
-    radial-gradient(ellipse at 12% 20%, rgba(255, 255, 255, .8) 0 2px, transparent 3px),
-    radial-gradient(ellipse at 86% 77%, rgba(255, 255, 255, .7) 0 3px, transparent 4px),
-    linear-gradient(135deg, #fff5e8 0%, #ffe6ec 48%, #fce6f3 100%);
-  background-size: 80px 80px, 110px 110px, auto;
-}
+yesButton.addEventListener('click', () => {
+  if (!choosingSchedule) {
+    choosingSchedule = true;
+    eventDetails.hidden = false;
+    prompt.textContent = 'Lovely! Choose a date and time:';
+    yesButton.innerHTML = 'Confirm date <span aria-hidden="true">♥</span>';
+    noButton.hidden = true;
+    dateInput.focus();
+    return;
+  }
 
-.invitation-card {
-  position: relative;
-  width: min(100%, 560px);
-  padding: 52px 48px 38px;
-  overflow: hidden;
-  text-align: center;
-  background: rgba(255, 255, 255, .88);
-  border: 1px solid rgba(255, 255, 255, .9);
-  border-radius: 28px;
-  box-shadow: 0 24px 70px rgba(151, 91, 112, .16);
-  backdrop-filter: blur(10px);
-}
+  if (!dateInput.value || !timeInput.value) {
+    (dateInput.value ? timeInput : dateInput).focus();
+    return;
+  }
 
-.eyebrow, .detail-label {
-  margin: 0;
-  color: #a94367;
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .2em;
-}
+  const date = new Date(`${dateInput.value}T00:00:00`);
+  const formattedDate = date.toLocaleDateString(undefined, {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+  });
+  const [hours, minutes] = timeInput.value.split(':').map(Number);
+  const formattedTime = new Date(2000, 0, 1, hours, minutes).toLocaleTimeString(undefined, {
+    hour: 'numeric', minute: '2-digit'
+  });
 
-.heart {
-  margin: 18px 0 8px;
-  color: #e7869e;
-  font-size: 2rem;
-  animation: heartbeat 1.8s ease-in-out infinite;
-}
+  confirmationDetails.textContent = `${formattedDate} at ${formattedTime}. I can’t wait! ♥`;
+  confirmation.hidden = false;
+  window.open('https://www.facebook.com/rintaru.tsumogi0', '_blank', 'noopener,noreferrer');
+  yesButton.disabled = true;
+  noButton.hidden = true;
+  confirmation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
 
-h1, h2 {
-  font-family: 'Playfair Display', Georgia, serif;
-}
-
-h1 {
-  max-width: 420px;
-  margin: 0 auto;
-  color: #68324e;
-  font-size: clamp(2rem, 7vw, 3rem);
-  line-height: 1.15;
-}
-
-.intro {
-  margin: 14px 0 27px;
-  color: #715363;
-  font-size: .98rem;
-}
-
-.event-details[hidden] { display: none; }
-.event-details {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 17px 16px;
-  background: #fff5f6;
-  border: 1px solid #f8e3e8;
-  border-radius: 16px;
-}
-
-.detail-icon { color: #dc879d; font-size: 1.45rem; }
-.detail-label { display: block; margin-bottom: 5px; font-size: .6rem; }
-.schedule-field { min-width: 0; }
-.schedule-input {
-  width: 100%;
-  padding: 5px 7px;
-  color: #624b55;
-  background: #fff;
-  border: 1px solid #efd6de;
-  border-radius: 7px;
-  font: inherit;
-  font-size: .8rem;
-}
-.schedule-input:focus-visible { outline: 2px solid #bf788e; outline-offset: 2px; }
-.detail-divider { width: 1px; height: 38px; background: #efd6de; flex: 0 0 1px; }
-.prompt { margin: 27px 0 16px; color: #5d3b50; font-weight: 700; }
-
-.button-area {
-  position: relative;
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-button {
-  min-height: 48px;
-  padding: 0 21px;
-  border: 0;
-  border-radius: 999px;
-  font: inherit;
-  font-size: .9rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-}
-
-button:focus-visible { outline: 3px solid #7651a3; outline-offset: 4px; }
-.yes-button { color: white; background: #c94f77; box-shadow: 0 7px 16px rgba(201, 79, 119, .3); }
-.yes-button:hover { transform: translateY(-2px); background: #b83f69; box-shadow: 0 10px 20px rgba(201, 79, 119, .38); }
-.yes-button span { margin-left: 5px; }
-.no-button {
-  min-height: 58px;
-  padding: 0 30px;
-  color: #614b58;
-  background: #f5eef0;
-  font-size: 1.05rem;
-}
-.no-button:hover { background: #eee3e7; }
-.small-note { margin: 21px 0 0; color: #765d69; font-size: .78rem; }
-
-.confirmation {
-  margin-top: 22px;
-  padding: 18px 14px;
-  color: #744e5d;
-  background: #fff2f5;
-  border-radius: 16px;
-  animation: appear .35s ease both;
-}
-.confirmation[hidden] { display: none; }
-.confirmation > span { font-size: 1.5rem; }
-.confirmation h2 { margin: 5px 0; font-size: 1.6rem; }
-.confirmation p { margin: 0; font-size: .9rem; }
-.flower { position: absolute; color: #f2bac8; opacity: .5; pointer-events: none; }
-.flower-one { top: 24px; left: 27px; font-size: 2.1rem; transform: rotate(-18deg); }
-.flower-two { right: 27px; bottom: 22px; font-size: 2.2rem; transform: rotate(14deg); }
-
-@keyframes heartbeat { 50% { transform: scale(1.15); } }
-@keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-@media (max-width: 480px) {
-  .invitation-card { padding: 42px 22px 32px; border-radius: 23px; }
-  .event-details { gap: 11px; padding: 15px 10px; }
-  .detail-value { font-size: .78rem; }
-  .button-area { gap: 8px; }
-  button { padding: 0 16px; font-size: .82rem; }
-  .flower-one { top: 14px; left: 13px; }
-  .flower-two { right: 13px; bottom: 14px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
-    
