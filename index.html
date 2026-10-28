@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff1f3">
+  <title>A Little Date Invitation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="invitation-card">
+    <div class="flower flower-one" aria-hidden="true">✿</div>
+    <div class="flower flower-two" aria-hidden="true">♡</div>
+
+    <p class="eyebrow">A LITTLE QUESTION FOR YOU</p>
+    <div class="heart" aria-hidden="true">♥</div>
+    <h1>Would you go on a date with me?</h1>
+    <p class="intro">I’d love to spend a lovely evening together.</p>
+
+    <section class="event-details" id="eventDetails" aria-label="Date details" hidden>
+      <div class="detail-icon" aria-hidden="true">☽</div>
+      <div class="schedule-field">
+        <label class="detail-label" for="dateInput">CHOOSE A DATE</label>
+        <input class="schedule-input" id="dateInput" type="date" required>
+      </div>
+      <span class="detail-divider" aria-hidden="true"></span>
+      <div class="schedule-field">
+        <label class="detail-label" for="timeInput">CHOOSE A TIME</label>
+        <input class="schedule-input" id="timeInput" type="time" required>
+      </div>
+    </section>
+
+    <p class="prompt">So, what do you say?</p>
+    <div class="button-area" id="buttonArea">
+      <button class="yes-button" id="yesButton" type="button">Yes, I’d love to! <span aria-hidden="true">♥</span></button>
+      <button class="no-button" id="noButton" type="button">No</button>
+    </div>
+    <p class="small-note">There’ll be good company, a little adventure, and maybe dessert ✨</p>
+
+    <div class="confirmation" id="confirmation" role="status" aria-live="polite" hidden>
+      <span aria-hidden="true">💌</span>
+      <h2>Yay! It’s a date!</h2>
+      <p id="confirmationDetails">I can’t wait! ♥</p>
+      <a class="facebook-link" href="https://www.facebook.com/rintaru.tsumogi0" target="_blank" rel="noopener noreferrer">Message me on Facebook</a>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
